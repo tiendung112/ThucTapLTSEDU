@@ -8,6 +8,7 @@ using ThucTapLTSEDU.Services.IServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using ThucTapLTSEDU.PayLoads.Requests.Auth;
 
+
 namespace ThucTapLTSEDU.Controllers
 {
     [Route("api/[controller]")]
@@ -15,10 +16,12 @@ namespace ThucTapLTSEDU.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        private readonly IAuth_Services authServices;
+
+        private readonly IAuthServices authServices;
         public AuthController(IConfiguration configuration)
         {
-            authServices = new Auth_Services(configuration);
+            authServices = new AuthServices(configuration);
+
             _configuration = configuration;
         }
 
