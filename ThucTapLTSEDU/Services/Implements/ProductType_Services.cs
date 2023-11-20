@@ -40,7 +40,7 @@ namespace ThucTapLTSEDU.Services.Implements
                 }
                 else
                 {
-                    var avatarFile = await HandleUploadImage.Upfile(request.image_type_product);
+                    var avatarFile = await HandleUploadImage.Upfile(request.image_type_product,"Product_type/LoaisanPham");
                     lsp.image_type_product = avatarFile == "" ? "https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o=" : avatarFile;
                 }
             }
@@ -97,7 +97,7 @@ namespace ThucTapLTSEDU.Services.Implements
             }
             else
             {
-                var avatarFile = await HandleUploadImage.Upfile(request.image_type_product);
+                var avatarFile = await HandleUploadImage.Upfile(request.image_type_product, "Product_type");
                 lsp.image_type_product = avatarFile == "" ? lsp.image_type_product: avatarFile;
             } 
             lsp.name_product_type = request.name_product_type;

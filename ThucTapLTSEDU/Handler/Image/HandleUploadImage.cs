@@ -15,7 +15,7 @@ namespace ThucTapLTSEDU.Handler.Image
         static public Cloudinary _cloudinary = new Cloudinary(account);
 
         // Phương thức để tải lên một hình ảnh lên Cloudinary
-        public static async Task<string> Upfile(IFormFile file)
+        public static async Task<string> Upfile(IFormFile file,string duongdan)
         {
             // Kiểm tra xem tập tin có null hoặc rỗng không
             if (file == null || file.Length == 0)
@@ -29,7 +29,7 @@ namespace ThucTapLTSEDU.Handler.Image
                 var uploadParams = new ImageUploadParams()
                 {
                     File = new FileDescription(file.FileName, stream), 
-                    PublicId = "xyz-abc" + "_" + DateTime.Now.Ticks + "image", 
+                    PublicId = $"{duongdan}/" + $"{duongdan}" + DateTime.Now.Ticks + "image", 
                     Transformation = new Transformation().Width(300).Height(400).Crop("fill") 
                 };
                 //thêm phân chia foulder theo account
