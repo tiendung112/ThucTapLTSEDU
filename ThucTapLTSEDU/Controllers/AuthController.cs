@@ -3,10 +3,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ThucTapLTSEDU.Pagination;
 using ThucTapLTSEDU.PayLoads.DTOs;
-using ThucTapLTSEDU.PayLoads.Requests;
 using ThucTapLTSEDU.Services.Implements;
 using ThucTapLTSEDU.Services.IServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using ThucTapLTSEDU.PayLoads.Requests.Auth;
+
 
 namespace ThucTapLTSEDU.Controllers
 {
@@ -15,10 +16,12 @@ namespace ThucTapLTSEDU.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IConfiguration _configuration;
+
         private readonly IAuthServices authServices;
         public AuthController(IConfiguration configuration)
         {
             authServices = new AuthServices(configuration);
+
             _configuration = configuration;
         }
 

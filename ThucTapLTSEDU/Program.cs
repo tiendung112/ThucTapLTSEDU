@@ -11,7 +11,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<IAuthServices, AuthServices>();
+builder.Services.AddScoped<IAuth_Services, Auth_Services>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
