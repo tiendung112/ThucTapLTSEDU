@@ -15,7 +15,7 @@ namespace ThucTapLTSEDU.Entities
         public int discount { get; set; }
         public int status { get; set; }
         public int number_of_views { get; set; }
-        public DateTime? created_at { get; set; } = DateTime.Now;
+        public DateTime? created_at { get; set; } 
         public DateTime? updated_at { get; set; }
         public IEnumerable<Product_review>? reviews { get; set; }
         public IEnumerable<Cart_item>? cart_Items { get; set; }

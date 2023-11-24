@@ -17,10 +17,10 @@ namespace ThucTapLTSEDU.Controllers
     {
         private readonly IConfiguration _configuration;
 
-        private readonly IAuthServices authServices;
+        private readonly IAuth_Services authServices;
         public AuthController(IConfiguration configuration)
         {
-            authServices = new AuthServices(configuration);
+            authServices = new Auth_Services(configuration);
 
             _configuration = configuration;
         }
@@ -96,7 +96,7 @@ namespace ThucTapLTSEDU.Controllers
         }
         [HttpPost]
         [Route(("/api/auth/login"))]
-        public async Task<IActionResult> Login(Request_Login request)
+        public async Task<IActionResult> Login([FromBody]Request_Login request)
         {
             var result = await authServices.Login(request);
             if (result == null)

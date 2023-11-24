@@ -19,8 +19,8 @@
         }
         public Pagintation()
         {
-            PageSize = -1;
-            PageNumber = 1;
+            PageSize = 0;
+            PageNumber = 0;
         }
     }
 }
