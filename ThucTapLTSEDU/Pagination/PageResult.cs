@@ -13,7 +13,7 @@
         public static IEnumerable<T> toPageResult(Pagintation pagintation, IEnumerable<T> data)
         {
             pagintation.PageNumber = pagintation.PageNumber < 1 ? 1 : pagintation.PageNumber;
-            data = data.Skip(pagintation.PageSize * (pagintation.PageNumber - 1)).Take(pagintation.PageSize).AsQueryable();
+            data = pagintation.PageSize == 0 ? data : data.Skip(pagintation.PageSize * (pagintation.PageNumber - 1)).Take(pagintation.PageSize).AsQueryable();
             return data;
         }
     }
