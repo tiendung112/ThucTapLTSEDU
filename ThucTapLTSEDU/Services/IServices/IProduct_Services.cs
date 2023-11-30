@@ -11,5 +11,7 @@ namespace ThucTapLTSEDU.Services.IServices
         Task<ResponseObject<ProductDTOs>> ThemSanPham(Request_ThemProduct request);
         Task<ResponseObject<ProductDTOs>> SuaSanPham(int id,Request_SuaProduct request);
         Task<ResponseObject<ProductDTOs>> XoaSanPham(int id );
+        Task<PageResult<ProductDTOs>> HienThiCacSanPhamNoiBat();
+        Task<ProductDTOs> HienThiSanPham(int id);
     }
 }

@@ -18,6 +18,26 @@ namespace ThucTapLTSEDU.Services.Implements
         {
             converters = new Product_Converters();
         }
+
+        public async Task<PageResult<ProductDTOs>> HienThiCacSanPhamNoiBat()
+        {
+            Pagintation pagintation = new Pagintation() { PageNumber = 0, PageSize = 15};
+
+            var sp = context.Products.OrderBy(y=>y.number_of_views).Select(x => converters.EntityToDTOs(x));
+            var res = PageResult<ProductDTOs>.toPageResult(pagintation, sp);
+            PageResult<ProductDTOs> result = new PageResult<ProductDTOs>(pagintation, res);
+            return result;
+        }
+        public async Task<ProductDTOs> HienThiSanPham(int id)
+        {
+            var product = context.Products.SingleOrDefault(x => x.Id == id);
+            product.number_of_views++;
+            context.Update(product);
+            await context.SaveChangesAsync();
+            var result = converters.EntityToDTOs(product);
+            return result;
+        }
+
         public async Task<PageResult<ProductDTOs>> HienThiDanhSachSanPham(Pagintation pagintation)
         {
             var sp = context.Products.Select(x => converters.EntityToDTOs(x));
@@ -77,6 +97,8 @@ namespace ThucTapLTSEDU.Services.Implements
                 sp.price = request.price;
                 sp.product_typeID = request.product_typeID;
                 sp.created_at = DateTime.Now;
+                sp.number_of_views = 0;
+
                 sp.status = 1;
                 
                 if (request.avartar_image_product != null)
@@ -113,7 +135,7 @@ namespace ThucTapLTSEDU.Services.Implements
             var lstORderDetail = context.Order_Details.Where(x=>x.productID == id);
             context.RemoveRange(lstORderDetail);
 
-            var lstCartItem  =context.Cart_Items.Where(x=>x.product_id == id);
+            var lstCartItem  =context.Cart_Items.Where(x=>x.productId == id);
             context.RemoveRange(lstCartItem);
 
             context.Remove(sp);

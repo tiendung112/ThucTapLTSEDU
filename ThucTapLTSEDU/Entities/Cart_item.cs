@@ -5,7 +5,7 @@ namespace ThucTapLTSEDU.Entities
     [Table(name:"Cart_item")]
     public class Cart_item :BaseEntity
     {
-        public int product_id {  get; set; }
+        public int productId {  get; set; }
         public Product? product { get; set; }
 
         public int cartID { get; set; }
