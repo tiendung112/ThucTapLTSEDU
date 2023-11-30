@@ -2,11 +2,12 @@
 
 namespace ThucTapLTSEDU.PayLoads.DTOs
 {
-    public class Order_DetailDTOs
+    public class CartItemDTOs
     {
-        public int order_detailID {  get; set; }
-        public string? productname{ get; set; }
-        public double? price_total { get; set; }
+        public int cardItemId {  get; set; }
+        public int cartID { get; set; }
+        public int productId { get; set; }
+        public string productName { get; set; } 
         public int? quantity { get; set; }
         public DateTime? created_at { get; set; }
         public DateTime? updated_at { get; set; }

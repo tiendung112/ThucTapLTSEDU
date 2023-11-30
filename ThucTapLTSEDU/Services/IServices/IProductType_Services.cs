@@ -10,7 +10,7 @@ namespace ThucTapLTSEDU.Services.IServices
     {
         Task<ResponseObject<Product_TypeDTOs>> CreateProudct_type(Request_Create_Product_type  request);
         Task<ResponseObject<Product_TypeDTOs>> UpdateProudct_type(Request_Update_Product_type request);
-        Task<ResponseObject<Product_TypeDTOs>> DeleteProudct_type(Request_Delete_Product_type request);
+        Task<ResponseObject<Product_TypeDTOs>> DeleteProudct_type(int id );
         Task<IQueryable<Product_TypeDTOs>> DisplayProudct_type(Pagintation pagintation);
 
     }

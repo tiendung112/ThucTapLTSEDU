@@ -49,18 +49,18 @@ namespace ThucTapLTSEDU.Services.Implements
             return responseObject.ResponseSuccess("Thêm loại sản phẩm thành công ", converters.EntityToDTOs(lsp));
         }
 
-        public async Task<ResponseObject<Product_TypeDTOs>> DeleteProudct_type(Request_Delete_Product_type request)
+        public async Task<ResponseObject<Product_TypeDTOs>> DeleteProudct_type(int id  )
         {
-            var lsp = context.Products_type.SingleOrDefault(x => x.Id == request.product_typeID);
+            var lsp = context.Products_type.SingleOrDefault(x => x.Id == id);
             if (lsp == null)
             {
                 return responseObject.ResponseError(StatusCodes.Status404NotFound, "Không tồn tại loại sản phẩm này", null);
             }
             //xoá loại sản phẩm cần xoá sản phẩm
-            var sp = context.Products.Where(x => x.product_typeID == request.product_typeID).ToList();
+            var sp = context.Products.Where(x => x.product_typeID == id).ToList();
             foreach(var item in sp)
             {
-                var cartItem = context.Cart_Items.Where(x => x.product_id == item.Id); 
+                var cartItem = context.Cart_Items.Where(x => x.productId == item.Id); 
                 context.RemoveRange(cartItem);
                 var oderDetail = context.Order_Details.Where(x => x.productID == item.Id); 
                 context.RemoveRange(oderDetail);
