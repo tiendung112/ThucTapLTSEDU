@@ -12,10 +12,10 @@ namespace ThucTapLTSEDU.PayLoads.Converters
             return new CartDTOs
             {
                 userID = carts.userID,
-                cart_Items = context.Cart_Items.Select(x=>converters.EntityToDTOs(x)),
+                cart_Items = context.Cart_Items.Where(x=>x.cartID==carts.Id).Select(x=>converters.EntityToDTOs(x)),
                 created_at = carts.created_at,
                 updated_at = carts.updated_at,
-                CartId = carts.Id,
+                CartId =carts.Id
             };
         }
     }

@@ -201,9 +201,10 @@ namespace ThucTapLTSEDU.Services.Implements
                     new Claim("RoleId", acc.decedecentralizationID.ToString()),
                     new Claim(ClaimTypes.Role,decentralization?.Authority_name ?? "")
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(30),
+                Expires = DateTime.UtcNow.AddHours(2),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKeyBytes), SecurityAlgorithms.HmacSha256Signature)
             };
+
             var token = jwtTokenHandler.CreateToken(tokenDescription);
             var accessToken = jwtTokenHandler.WriteToken(token);
             var refreshToken = GenerateRefreshToken();
@@ -211,7 +212,7 @@ namespace ThucTapLTSEDU.Services.Implements
             RefreshToken rf = new RefreshToken
             {
                 Token = refreshToken,
-                ExpiredTime = DateTime.UtcNow.AddHours(3),
+                ExpiredTime = DateTime.UtcNow.AddHours(5),
                 accountID = acc.Id
             };
 

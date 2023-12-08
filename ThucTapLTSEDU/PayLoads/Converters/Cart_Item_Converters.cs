@@ -11,7 +11,6 @@ namespace ThucTapLTSEDU.PayLoads.Converters
             return new CartItemDTOs()
             {
                 cardItemId = cart_Item.Id,
-                cartID = cart_Item.cartID,
                 created_at = cart_Item.created_at,
                 updated_at = cart_Item.updated_at,
                 productId = cart_Item.productId,

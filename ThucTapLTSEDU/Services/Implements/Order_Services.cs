@@ -1,6 +1,7 @@
 ﻿using CloudinaryDotNet;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
+using System.Net.WebSockets;
 using ThucTapLTSEDU.Entities;
 using ThucTapLTSEDU.Handler.Email;
 using ThucTapLTSEDU.Pagination;
@@ -31,7 +32,7 @@ namespace ThucTapLTSEDU.Services.Implements
         }
 
     
-        public async Task<ResponseObject<OrderDTOs>> TaoOder(int accid, Request_ThemOrder request)
+        public async Task<ResponseObject<OrderDTOs>> TaoOder(int accid,int cartid, Request_ThemOrder request)
         {
             
             if (!context.Payment.Any(x => x.Id == request.paymentID))
@@ -52,8 +53,10 @@ namespace ThucTapLTSEDU.Services.Implements
             };
             context.Orders.Add(order);
             await context.SaveChangesAsync();
-
-            List<Order_detail> list =await CreateOrderDetail(order.Id,request.details);
+            var cart = context.Carts.SingleOrDefault(x => x.Id == cartid);
+            var cartItem = context.Cart_Items.Where(x => x.cartID == cartid);
+            
+            List<Order_detail> list =await ConverCartItemToOrderDetail(cartItem.ToList());
             order.order_Details = list;
             order.actual_price = list.Sum(x => x.price_total);
             order.original_price = 0;
@@ -92,7 +95,21 @@ namespace ThucTapLTSEDU.Services.Implements
                 " vui lòng nhập mã xác nhận đã được gửi về email của bạn"
                 , converters.EntityToDTOs(order));
         }
-        private async Task<List<Order_detail>> CreateOrderDetail(int orderId, List<Request_ThemOrderDetail> order_Details)
+        private async Task<List<Order_detail>> ConverCartItemToOrderDetail(List<Cart_item> cart_Items)
+        {
+            List<Order_detail> details = new List<Order_detail>();
+            foreach(var item in cart_Items) {
+                var sp = context.Products.SingleOrDefault(x => x.Id == item.productId);
+                Order_detail detail = new Order_detail();
+                detail.quantity = item.quantity;
+                detail.productID = item.productId;
+                detail.updated_at = DateTime.Now;
+                detail.price_total = item.quantity *sp.price * sp.discount / 100;
+                details.Add(detail);
+            }
+            return details;
+        }
+       /* private async Task<List<Order_detail>> CreateOrderDetail(int orderId, List<Request_ThemOrderDetail> order_Details)
         {
             List<Order_detail> details = new List<Order_detail>();
             foreach(var item in order_Details)
@@ -114,7 +131,7 @@ namespace ThucTapLTSEDU.Services.Implements
                 details.Add(detail);
             }
             return details;
-        }
+        }*/
 
         public async Task<string> XacNhanOrder(Request_ValidateRegister request)
         {
@@ -129,8 +146,9 @@ namespace ThucTapLTSEDU.Services.Implements
             {
                 return "Mã xác nhận đã hết hạn";
             }
+
             Order order = context.Orders.FirstOrDefault(x => x.Id == confirmEmail.AccountID);
-            order.order_statusID = 4;
+            order.order_statusID = 2;
             order.updated_at = DateTime.Now;
             context.EmailValidates.Remove(confirmEmail);
             context.Orders.Update(order);
@@ -143,7 +161,6 @@ namespace ThucTapLTSEDU.Services.Implements
             var order = context.Orders.SingleOrDefault(x => x.Id == id);
             if(order == null)
             {
-
                 return response.ResponseError(StatusCodes.Status404NotFound, "Không tồn tại order này", null);
             }
             var lstorderDetail = context.Order_Details.Where(x => x.orderID == order.Id);
@@ -190,6 +207,13 @@ namespace ThucTapLTSEDU.Services.Implements
             var sp = context.Orders.Select(x => converters.EntityToDTOs(x));
             var page = PageResult<OrderDTOs>.toPageResult(pagintation, sp);
             PageResult<OrderDTOs> result = new PageResult<OrderDTOs>(pagintation,page);
+            return result;
+        }
+        public async Task<PageResult<OrderDTOs>> OrderByID(int id, Pagintation pagintation)
+        {
+            var sp = context.Orders.Where(x=>x.userID==id).Select(x => converters.EntityToDTOs(x));
+            var page = PageResult<OrderDTOs>.toPageResult(pagintation, sp);
+            PageResult<OrderDTOs> result = new PageResult<OrderDTOs>(pagintation, page);
             return result;
         }
     }
