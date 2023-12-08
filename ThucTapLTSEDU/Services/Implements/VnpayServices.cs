@@ -19,36 +19,40 @@ namespace ThucTapLTSEDU.Services.Implements
             _configuration = configuration;
             pay = new VNPayLibrary();
         }
-        public async Task<string> CreatePaymentUrl(int orderID,HttpContext httpContext)
+        public async Task<string> CreatePaymentUrl(int orderID,HttpContext httpContext,int id)
         {
             var order = context.Orders.SingleOrDefault(x=>x.Id==orderID);
-            if (order.order_statusID == 1)
+            if(context.Users.SingleOrDefault(x=>x.accountID==id).Id==order.userID)
             {
-                return "Đon hàng của bạn chưa được duyệt ";
+                if (order.order_statusID == 1)
+                {
+                    return "Đon hàng của bạn chưa được duyệt ";
+                }
+
+                if (order.order_statusID == 3)
+                {
+                    return "Đon hàng của bạn đã được thanh toán ";
+                }
+
+                //pay.AddRequestData("vnp_BankCode", "VNPAYQR");
+                pay.AddRequestData("vnp_Version", "2.1.0");
+                pay.AddRequestData("vnp_Command", "pay");
+                pay.AddRequestData("vnp_TmnCode", "YIK14C5R");
+                pay.AddRequestData("vnp_Amount", (order.actual_price * 1000).ToString());
+                pay.AddRequestData("vnp_CreateDate", DateTime.Now.ToString("yyyyMMddHHmmss"));
+                pay.AddRequestData("vnp_CurrCode", "VND");
+                pay.AddRequestData("vnp_IpAddr", Utils.GetIpAddress(httpContext));
+                pay.AddRequestData("vnp_Locale", "vn");
+                pay.AddRequestData("vnp_OrderInfo", $"Thanh toan don hang{orderID}");
+                pay.AddRequestData("vnp_OrderType", "other");
+                pay.AddRequestData("vnp_ReturnUrl", _configuration.GetSection("VnPay:vnp_ReturnUrl").Value);
+                pay.AddRequestData("vnp_TxnRef", orderID.ToString());
+
+                string paymentUrl = pay.CreateRequestUrl(_configuration.GetSection("VnPay:vnp_Url").Value, _configuration.GetSection("VnPay:vnp_HashSecret").Value);
+                return paymentUrl;
             }
-
-            if (order.order_statusID == 3)
-            {
-                return "Đon hàng của bạn đã được thanh toán ";
-            }
-
-
-            //pay.AddRequestData("vnp_BankCode", "VNPAYQR");
-            pay.AddRequestData("vnp_Version", "2.1.0");
-            pay.AddRequestData("vnp_Command", "pay"); 
-            pay.AddRequestData("vnp_TmnCode", "YIK14C5R"); 
-            pay.AddRequestData("vnp_Amount", (order.actual_price*1000).ToString());     
-            pay.AddRequestData("vnp_CreateDate", DateTime.Now.ToString("yyyyMMddHHmmss")); 
-            pay.AddRequestData("vnp_CurrCode", "VND"); 
-            pay.AddRequestData("vnp_IpAddr", Utils.GetIpAddress(httpContext)); 
-            pay.AddRequestData("vnp_Locale", "vn"); 
-            pay.AddRequestData("vnp_OrderInfo", $"Thanh toan don hang{orderID}"); 
-            pay.AddRequestData("vnp_OrderType", "other"); 
-            pay.AddRequestData("vnp_ReturnUrl", _configuration.GetSection("VnPay:vnp_ReturnUrl").Value); 
-            pay.AddRequestData("vnp_TxnRef", orderID.ToString());
-
-            string paymentUrl = pay.CreateRequestUrl(_configuration.GetSection("VnPay:vnp_Url").Value, _configuration.GetSection("VnPay:vnp_HashSecret").Value);
-            return  paymentUrl;
+            return "xem lại đơn hàng của bạn";
+            
         }
         public async Task<string> VNPayReturn(IQueryCollection vnpayData)
         {

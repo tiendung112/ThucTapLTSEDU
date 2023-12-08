@@ -6,9 +6,9 @@ namespace ThucTapLTSEDU.Handler.Image
     public class HandleUploadImage
     {
         // Thông tin đăng nhập Cloudinary
-        static string cloudName = "dleakiid7";
-        static string apiKey = "337694681628724";
-        static string apiSecret = "Gx3gBG6eLlG_NZoMn3FuOX4KrpE";
+        static string cloudName = "defwlfzwl";
+        static string apiKey = "619677395578241";
+        static string apiSecret = "opfhYWKT1zDUbPWD4qGWBGH1gJg";
 
         // Tạo đối tượng tài khoản và đối tượng Cloudinary
         static public Account account = new Account(cloudName, apiKey, apiSecret);
