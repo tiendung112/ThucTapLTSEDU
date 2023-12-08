@@ -245,10 +245,11 @@ namespace ThucTapLTSEDU.Controllers
         }
         [HttpPost]
         [Route("/API/Vnpay/CreatePaymentUrl")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> CreatePaymentUrl(int orderid)
         {
-            
-            return Ok(await vnpayServices.CreatePaymentUrl(orderid,HttpContext));
+            int id = int.Parse(HttpContext.User.FindFirst("Id").Value);
+            return Ok(await vnpayServices.CreatePaymentUrl(orderid,HttpContext,id));
         }
         #endregion
 
@@ -288,14 +289,28 @@ namespace ThucTapLTSEDU.Controllers
             var res = await orderServices.XoaOrderChuaDuyet();
             return Ok(res);
         }
+
         [HttpGet]
         [Route("/api/Order/HienThi")]
-       // [Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> HienThiDanhSachOrder(int pageSize, int pageNumber)
         {
             Pagintation pagintation1 = new Pagintation() { PageSize = pageSize, PageNumber = pageNumber };
             return Ok(orderServices.getAll(pagintation1));
+
         }
+
+        [HttpGet]
+        [Route("/api/Order/HienThiDanhSachOrderCuaBanThan}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> HienThiDanhSachOrderCuaBanThan(int pageSize, int pageNumber)
+        {
+            int id = int.Parse(HttpContext.User.FindFirst("Id").Value);
+            Pagintation pagintation1 = new Pagintation() { PageSize = pageSize, PageNumber = pageNumber };
+            return Ok(orderServices.HienThiOrderBanThan( id ,pagintation1));
+        }
+
+
         #endregion
     }
 }

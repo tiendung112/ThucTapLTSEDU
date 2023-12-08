@@ -1,6 +1,7 @@
 ﻿using CloudinaryDotNet;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
+using System.Buffers;
 using System.Net.WebSockets;
 using ThucTapLTSEDU.Entities;
 using ThucTapLTSEDU.Handler.Email;
@@ -23,12 +24,6 @@ namespace ThucTapLTSEDU.Services.Implements
         {
             converters = new Order_Converters();
             response = new ResponseObject<OrderDTOs>();
-        }
-        public async Task<PageResult<OrderDTOs>> HienThiDTOs(int id,Pagintation pagintation)
-        {
-            var order = id == 0? context.Orders.Select(x => converters.EntityToDTOs(x)): context.Orders.Where(y=>y.Id==id).Select(x => converters.EntityToDTOs(x));
-            var result = PageResult<OrderDTOs>.toPageResult(pagintation, order);
-            return  new PageResult<OrderDTOs>(pagintation, result);
         }
 
     
@@ -215,6 +210,14 @@ namespace ThucTapLTSEDU.Services.Implements
             var page = PageResult<OrderDTOs>.toPageResult(pagintation, sp);
             PageResult<OrderDTOs> result = new PageResult<OrderDTOs>(pagintation, page);
             return result;
+        }
+
+
+        public async Task<PageResult<OrderDTOs>> HienThiOrderBanThan(int id, Pagintation pagintation)
+        {
+            var order = id == 0 ? context.Orders.Select(x => converters.EntityToDTOs(x)) : context.Orders.Where(y => y.Id == id).Select(x => converters.EntityToDTOs(x));
+            var result = PageResult<OrderDTOs>.toPageResult(pagintation, order);
+            return new PageResult<OrderDTOs>(pagintation, result);
         }
     }
 }
