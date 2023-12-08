@@ -21,5 +21,6 @@ namespace ThucTapLTSEDU.Entities
         public DateTime? created_at { get; set; } = DateTime.Now;
         public DateTime? updated_at { get; set; }
         public IEnumerable<Order_detail>? order_Details { get; set; }
+        public IEnumerable<VnpayBill>? vnpays { get; set; }
     }
 }

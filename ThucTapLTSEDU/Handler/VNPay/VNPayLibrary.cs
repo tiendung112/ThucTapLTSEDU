@@ -112,8 +112,6 @@ namespace ThucTapLTSEDU.Handler.VNPay
 
     public class Utils
     {
-
-
         public static String HmacSHA512(string key, String inputData)
         {
             var hash = new StringBuilder();
@@ -132,7 +130,7 @@ namespace ThucTapLTSEDU.Handler.VNPay
         }
         public static string GetIpAddress(HttpContext httpContext)
         {
-            /*string ipAddress;
+           /* string ipAddress;
             try
             {
                 ipAddress = HttpContext.Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"];

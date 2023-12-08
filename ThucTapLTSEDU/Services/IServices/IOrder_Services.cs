@@ -9,7 +9,7 @@ namespace ThucTapLTSEDU.Services.IServices
 {
     public interface IOrder_Services
     {
-        Task<ResponseObject<OrderDTOs>> TaoOder(int accid , Request_ThemOrder request);
+        Task<ResponseObject<OrderDTOs>> TaoOder(int accid, int cartid, Request_ThemOrder request);
         Task<string> XacNhanOrder(Request_ValidateRegister request);
         Task<ResponseObject<OrderDTOs>> SuaOder(int id , Request_SuaOrder request);
         Task<ResponseObject<OrderDTOs>> XoaOder(int id);

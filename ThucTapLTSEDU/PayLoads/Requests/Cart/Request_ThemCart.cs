@@ -5,6 +5,6 @@ namespace ThucTapLTSEDU.PayLoads.Requests.Cart
 {
     public class Request_ThemCart
     {
-        public IQueryable<Request_ThemCart_Items>? cart_Items { get; set; }
+        public IEnumerable<Request_ThemCart_Items>? cart_Items { get; set; }
     }
 }
