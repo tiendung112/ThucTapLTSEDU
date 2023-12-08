@@ -301,7 +301,7 @@ namespace ThucTapLTSEDU.Controllers
         }
 
         [HttpGet]
-        [Route("/api/Order/HienThiDanhSachOrderCuaBanThan}")]
+        [Route("/api/Order/HienThiDanhSachOrderCuaBanThan")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> HienThiDanhSachOrderCuaBanThan(int pageSize, int pageNumber)
         {
